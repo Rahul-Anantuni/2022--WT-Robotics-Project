@@ -6,6 +6,7 @@ https://www.ni.com/en-us/support/downloads/drivers/download.frc-game-tools.html#
 
 WPILIB/VSCode:
 https://github.com/wpilibsuite/allwpilib/releases
+
 WPILIB Documentation:
 https://docs.wpilib.org/en/stable/index.html
 
@@ -14,17 +15,21 @@ https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/radio-programming.ht
 
 CTRE Phoenix Tuner & Controller Firmware:
 https://github.com/CrossTheRoadElec/Phoenix-Releases/releases
+
 CTRE Documentation:
 https://docs.ctre-phoenix.com/en/stable/
 
 Rev Firmware & Installer:
 https://docs.revrobotics.com/rev-hardware-client/
-VSCode API:
+
+Rev VSCode Library:
 https://docs.revrobotics.com/sparkmax/software-resources/spark-max-api-information#c++-and-java
+
 Rev Documents:
 https://codedocs.revrobotics.com/java/com/revrobotics/
 
 Limelight Firmware/Tools:
 https://limelightvision.io/pages/downloads
+
 Limelight Documentation:
 https://docs.limelightvision.io/en/latest/
