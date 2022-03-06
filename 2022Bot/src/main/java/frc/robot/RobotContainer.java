@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,16 +25,27 @@ import frc.robot.commands.GetWithinDistancePID;
 import frc.robot.commands.IntakeOFF;
 import frc.robot.commands.IntakeON;
 import frc.robot.commands.IntakeReverse;
+import frc.robot.commands.LiftDown;
+import frc.robot.commands.LiftStop;
+import frc.robot.commands.LiftUp;
+import frc.robot.commands.LiftUpTwo;
 import frc.robot.commands.ReverseDrive;
 import frc.robot.commands.Rotate;
 import frc.robot.commands.RotatePID;
+import frc.robot.commands.ServoPosHalf;
+import frc.robot.commands.ServoPosOne;
+import frc.robot.commands.ServoPosZero;
 import frc.robot.commands.ShooterHigh;
 import frc.robot.commands.ShooterLow;
 import frc.robot.commands.ShooterStop;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TestAuto;
+import frc.robot.commands.WinchReverse;
+import frc.robot.commands.WinchStop;
+import frc.robot.commands.WinchUp;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -47,13 +59,16 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain() ; 
   private final Shooter m_shooter = new Shooter();
   private final Intake m_intake = new Intake();
+  private final Lift m_lift = new Lift();
+
   private final XboxController m_OperatorController = new XboxController(0); 
   private final Joystick m_DriverController = new Joystick(1); 
  // private final Joystick m_LeftJoystick = new Joystick(0);
   //private final Joystick m_RightJoystick = new Joystick(3);
 
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
-  
+ // private final SendableChooser<Command> m_gate_chooser = new SendableChooser<>();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -84,8 +99,8 @@ public class RobotContainer {
                                                  ()->m_RightJoystick.getY()));
 */
 
-  SmartDashboard.putNumber("Shooter Speed", 0.8);
-
+  SmartDashboard.putNumber("Shooter Speed", 0.55);
+    CameraServer.startAutomaticCapture();
   configureButtonBindings();
   }
 
@@ -101,7 +116,8 @@ public class RobotContainer {
 
     final JoystickButton rightButton4 = new JoystickButton(m_RightJoystick, 4);
 
-    final JoystickButton rightButton6 = new JoystickButton(m_RightJoystick, 6);
+    fi
+    nal JoystickButton rightButton6 = new JoystickButton(m_RightJoystick, 6);
 
     final JoystickButton rightButton11 = new JoystickButton(m_RightJoystick, 11);
     final JoystickButton rightButton12 = new JoystickButton(m_RightJoystick, 12);
@@ -114,7 +130,9 @@ public class RobotContainer {
     final JoystickButton DriverButton1 = new JoystickButton(m_DriverController, 1);
     final JoystickButton DriverButton3 = new JoystickButton(m_DriverController, 3);
     final JoystickButton DriverButton4 = new JoystickButton(m_DriverController, 4);
-    
+    final JoystickButton DriverButton5 = new JoystickButton(m_DriverController, 5);
+    final JoystickButton DriverButton6 = new JoystickButton(m_DriverController, 6);
+
     // Controller Operator Buttons
     final JoystickButton OperatorButton1  = new JoystickButton(m_OperatorController, 1);
     final JoystickButton OperatorButton2  = new JoystickButton(m_OperatorController, 2);
@@ -128,11 +146,21 @@ public class RobotContainer {
     final JoystickButton OperatorButton11  = new JoystickButton(m_OperatorController, 11);
     final JoystickButton OperatorButton12  = new JoystickButton(m_OperatorController, 12);
 
-    
+    DriverButton1.whenPressed(new WinchUp(m_lift));
+
+    DriverButton1.whenReleased(new WinchStop(m_lift));
     DriverButton2.whenPressed(new ReverseDrive(m_drivetrain));
-    DriverButton1.whenPressed(new RotatePID(m_drivetrain, 90));
-    DriverButton3.whenInactive(new GetWithinDistancePID(m_drivetrain, 24));
+
+    DriverButton3.whenPressed(new WinchReverse(m_lift));
+    DriverButton3.whenReleased(new WinchStop(m_lift));
+
+  //  DriverButton3.whenPressed(new RotatePID(m_drivetrain, 90));
+  //DriverButton3.whenPressed(new GetWithinDistancePID(m_drivetrain, 24));
     DriverButton4.whenPressed(new DriveToTarget(m_drivetrain));
+    DriverButton5.whenPressed(new LiftUp(m_lift));
+    DriverButton5.whenReleased(new LiftStop(m_lift));
+    DriverButton6.whenPressed(new LiftDown(m_lift));
+    DriverButton6.whenReleased(new LiftStop(m_lift));
 
     OperatorButton3.whenPressed(new ShooterLow(m_shooter));
     OperatorButton1.whenPressed(new GateOpen(m_shooter));
@@ -149,9 +177,14 @@ public class RobotContainer {
     OperatorButton11.whenPressed(new DriveDistance(m_drivetrain, 0.5, 32));
     OperatorButton12.whenPressed(new GetWithinDistance(m_drivetrain, 0.35, 35));
 
-    m_chooser.setDefaultOption("AutoTwo", new AutoTwo(m_drivetrain, m_intake, m_shooter));
     m_chooser.addOption("AutoOne", new AutoOne(m_drivetrain, m_intake, m_shooter));
+    m_chooser.setDefaultOption("AutoTwo", new AutoTwo(m_drivetrain, m_intake, m_shooter));
     SmartDashboard.putData(m_chooser);
+
+    //m_gate_chooser.setDefaultOption("Gate Position 0", new ServoPosZero(m_shooter));
+    //m_gate_chooser.addOption("Gate Position 0.5", new ServoPosHalf(m_shooter));
+    //m_gate_chooser.addOption("Gate Position 1", new ServoPosOne(m_shooter));
+    //SmartDashboard.putData(m_gate_chooser);
     /*leftButton3.whenPressed(new ReverseDrive(m_drivetrain));
     rightButton3.whenPressed(new ReverseDrive(m_drivetrain));
     rightButton4.whenPressed(new DriveDistance(m_drivetrain, 0.5, 32));
@@ -175,10 +208,18 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_chooser.getSelected();
+    //return new AutoOne(m_drivetrain, m_intake, m_shooter);
+    //return new AutoTwo(m_drivetrain, m_intake, m_shooter);
+
     //m_autoCommand;
   }
 
   public void RobotPeriodic(){
     SmartDashboard.putData(m_drivetrain);
+    //m_gate_chooser.getSelected().schedule();;
+    
+  }
+  public void teleopInit(){
+    m_shooter.stop();
   }
 }

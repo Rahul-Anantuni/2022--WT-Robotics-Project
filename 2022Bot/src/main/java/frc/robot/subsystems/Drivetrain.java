@@ -94,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
     if (isReversed){
       DriveTrain.tankDrive(leftSpeed, rightSpeed);
     }else {
-      DriveTrain.tankDrive(rightSpeed, leftSpeed);
+      DriveTrain.tankDrive(-leftSpeed, -rightSpeed);
     }
   }
   
@@ -131,6 +131,7 @@ public class Drivetrain extends SubsystemBase {
       isReversed = true;
     }
   }
+  
   
   //gyro
   public double getAngle(){

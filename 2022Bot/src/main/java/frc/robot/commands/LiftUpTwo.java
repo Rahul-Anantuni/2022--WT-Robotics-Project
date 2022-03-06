@@ -5,53 +5,45 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Lift;
 
-public class DropIntake extends CommandBase {
-  /** Creates a new DropIntake. */
-  Drivetrain d;
-  int counter;
+public class LiftUpTwo extends CommandBase {
+  /** Creates a new LiftUpTwo. */
+  private Lift m;
+  private int counter = 0;
 
-  public DropIntake(Drivetrain drivetrain) {
-    d = drivetrain;
-    addRequirements(drivetrain);
+
+  public LiftUpTwo(Lift motor) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m = motor;
+    addRequirements(motor);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    d.setRampRate(0.0);
+    m.liftUp();
     counter = 0;
   }
-
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(counter < 3){
-      d.TeleopTankDrive(0.9, 0.9);
-    }else{
-      d.TeleopTankDrive(-0.9, -0.9);
-    }
-    counter++;
+  counter++;
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    d.TeleopTankDrive(0, 0);
-    d.setRampRate(Constants.RAMP_RATE);
+    m.liftStop();
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (counter >= 7 ){
-      return true;
-    }else{
-    return false;
+    return (counter>50);
+    
   }
-}
 }

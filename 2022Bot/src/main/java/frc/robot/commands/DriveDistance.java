@@ -14,7 +14,7 @@ public class DriveDistance extends CommandBase {
   private Drivetrain dt; //Stored drivetrain subsystem
   private double s;      //Stored Speed value
   private double d;      //Stored Distance to travel
-
+  private int counter = 0;
   /** Creates a new DriveDistance. */
   public DriveDistance(Drivetrain drivetrain, double speed, double distance) {
       //Store the parameters in the Global Variables
@@ -31,7 +31,6 @@ public class DriveDistance extends CommandBase {
   @Override
   public void initialize() {
     //Make sure the robot is not moving and the Encoder readings are at 0
-    dt.stop();
     dt.resetEncoders();
   }
 
@@ -39,7 +38,8 @@ public class DriveDistance extends CommandBase {
   @Override
   public void execute() {
     //Use Tank Drive method to drive straight forward
-    dt.TeleopTankDrive(s, s);
+    if (counter <= 4) {dt.TeleopTankDrive(s, s);}
+    counter++;
     //Display Distance Reading on Smartboard for Debugging Purposes
     SmartDashboard.putNumber("EncoderDistance", dt.getAverageDistance());
   }
@@ -55,7 +55,7 @@ public class DriveDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     //Command is finished when Encoder reading is >= desired distance
-    if (dt.getAverageDistance() >= d){
+    if ((dt.getAverageDistance() >= d) && (counter > 4)){
       return true;
     } else {
       return false;

@@ -28,15 +28,16 @@ private SparkMaxPIDController m_pidController = shooterMotor.getPIDController();
     shooterMotor.setIdleMode(IdleMode.kBrake);
 
     shooterMotor.setOpenLoopRampRate(0.08);
+    shooterMotor.setClosedLoopRampRate(0.08);
     shooterMotor.setSmartCurrentLimit(40);
     gateClose();
 
-    m_pidController.setP(6e-5);
+    m_pidController.setP(0.00095);
     m_pidController.setI(0);
-    m_pidController.setD(0);
+    m_pidController.setD(0.00001);
     m_pidController.setIZone(0);
-    m_pidController.setFF(0.000015);
-    m_pidController.setOutputRange(0,0.85);
+    m_pidController.setFF(0.0);//(0.000015);
+    m_pidController.setOutputRange(-1,1);
 
 
 
@@ -50,23 +51,28 @@ private SparkMaxPIDController m_pidController = shooterMotor.getPIDController();
   }
   public void shooterMotorHigh (){
     //setVelocity(Constants.SHOOTER_HIGH_SPEED);
-    //double s = SmartDashboard.getNumber("Shooter Speed", 0.8);
-    shooterMotor.set(Constants.SHOOTER_HIGH_SPEED);
+  //  double s = SmartDashboard.getNumber("Shooter Speed", 0.5);
+   shooterMotor.set(-Constants.SHOOTER_HIGH_SPEED);
+    //shooterMotor.set(-s);
+
 
   }
   public void shooterMotorLow (){
-    setVelocity(Constants.SHOOTER_LOW_SPEED);
+    //setVelocity(Constants.SHOOTER_LOW_SPEED);
+    shooterMotor.set(-Constants.SHOOTER_LOW_SPEED);
     
 
   }
 
   public void gateOpen (){
-    gate.set(0);
+    gate.set(0.7);
   }
   private void gateClose() {
-    gate.set(0.5);
+    gate.set(0.0);
   }
-  
+  public void gateSet(double angle){
+    gate.set(angle);
+  }
   public void setVelocity(double velocity){
    m_pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity);
   }
@@ -74,6 +80,8 @@ private SparkMaxPIDController m_pidController = shooterMotor.getPIDController();
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Servo Location", gate.getAngle());
+    
     SmartDashboard.putNumber("Shooter Temperature", shooterMotor.getMotorTemperature());
     SmartDashboard.putNumber("Shooter Output Current", shooterMotor.getOutputCurrent());
 
