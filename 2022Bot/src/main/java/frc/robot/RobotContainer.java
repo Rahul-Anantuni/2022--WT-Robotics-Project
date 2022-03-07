@@ -12,34 +12,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoOne;
 import frc.robot.commands.AutoTwo;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveToTarget;
 import frc.robot.commands.DropIntake;
+import frc.robot.commands.FlipDrive;
+import frc.robot.commands.GateClose;
 import frc.robot.commands.GateOpen;
 import frc.robot.commands.GetWithinDistance;
-import frc.robot.commands.GetWithinDistancePID;
 import frc.robot.commands.IntakeOFF;
 import frc.robot.commands.IntakeON;
 import frc.robot.commands.IntakeReverse;
 import frc.robot.commands.LiftDown;
 import frc.robot.commands.LiftStop;
 import frc.robot.commands.LiftUp;
-import frc.robot.commands.LiftUpTwo;
 import frc.robot.commands.ReverseDrive;
 import frc.robot.commands.Rotate;
 import frc.robot.commands.RotatePID;
-import frc.robot.commands.ServoPosHalf;
-import frc.robot.commands.ServoPosOne;
-import frc.robot.commands.ServoPosZero;
 import frc.robot.commands.ShooterHigh;
 import frc.robot.commands.ShooterLow;
 import frc.robot.commands.ShooterStop;
 import frc.robot.commands.TankDrive;
-import frc.robot.commands.TestAuto;
 import frc.robot.commands.WinchReverse;
 import frc.robot.commands.WinchStop;
 import frc.robot.commands.WinchUp;
@@ -132,6 +126,10 @@ public class RobotContainer {
     final JoystickButton DriverButton4 = new JoystickButton(m_DriverController, 4);
     final JoystickButton DriverButton5 = new JoystickButton(m_DriverController, 5);
     final JoystickButton DriverButton6 = new JoystickButton(m_DriverController, 6);
+    final JoystickButton DriverButton10 = new JoystickButton(m_DriverController, 10);
+    final JoystickButton DriverButton11 = new JoystickButton(m_DriverController, 11);
+    final JoystickButton DriverButton12 = new JoystickButton(m_DriverController, 12);
+
 
     // Controller Operator Buttons
     final JoystickButton OperatorButton1  = new JoystickButton(m_OperatorController, 1);
@@ -140,6 +138,8 @@ public class RobotContainer {
     final JoystickButton OperatorButton4  = new JoystickButton(m_OperatorController, 4);
     final JoystickButton OperatorButton5  = new JoystickButton(m_OperatorController, 5);
     final JoystickButton OperatorButton6  = new JoystickButton(m_OperatorController, 6);
+    final JoystickButton OperatorButton8 = new JoystickButton(m_OperatorController, 8);
+
     final JoystickButton OperatorButton9  = new JoystickButton(m_OperatorController, 9);
 
     final JoystickButton OperatorButton10  = new JoystickButton(m_OperatorController, 10);
@@ -162,17 +162,22 @@ public class RobotContainer {
     DriverButton6.whenPressed(new LiftDown(m_lift));
     DriverButton6.whenReleased(new LiftStop(m_lift));
 
+    DriverButton10.whenPressed(new FlipDrive(m_drivetrain));
+    DriverButton11.whenPressed(new DriveDistance(m_drivetrain, 0.75, 25));
+    DriverButton12.whenPressed(new DriveDistance(m_drivetrain, -0.75, -25));
+
     OperatorButton3.whenPressed(new ShooterLow(m_shooter));
     OperatorButton1.whenPressed(new GateOpen(m_shooter));
-    OperatorButton2.whenPressed(new ShooterStop(m_shooter));
+    OperatorButton2.whenPressed(new GateClose(m_shooter));
     OperatorButton4.whenPressed(new ShooterHigh(m_shooter));
 
     OperatorButton5.whenPressed(new IntakeON(m_intake));
     OperatorButton5.whenReleased(new IntakeOFF(m_intake));
     OperatorButton6.whenPressed(new IntakeReverse(m_intake));
     OperatorButton6.whenReleased(new IntakeOFF(m_intake));
+    OperatorButton8.whenPressed(new RotatePID(m_drivetrain, 180));
     OperatorButton9.whenPressed(new DropIntake(m_drivetrain));
-    OperatorButton10.whenPressed(new Rotate(m_drivetrain, 0.4, 180));
+    OperatorButton10.whenPressed(new ShooterStop(m_shooter));
 
     OperatorButton11.whenPressed(new DriveDistance(m_drivetrain, 0.5, 32));
     OperatorButton12.whenPressed(new GetWithinDistance(m_drivetrain, 0.35, 35));
@@ -220,6 +225,7 @@ public class RobotContainer {
     
   }
   public void teleopInit(){
-    m_shooter.stop();
+    //m_shooter.stop();
+    m_shooter.gateClose();
   }
 }

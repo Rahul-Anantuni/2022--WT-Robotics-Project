@@ -28,20 +28,14 @@ public class AutoOne extends SequentialCommandGroup {
      sequence(
        new DropIntake(drivetrain),
        new IntakeON(intake),
-       new ShooterHigh(shooter),
-       new DriveDistance(drivetrain, -0.7, -44),
-       new WaitCommand(1.5),
+      new ShooterHigh(shooter),
+       new DriveDistance(drivetrain, 0.7, 30).withTimeout(4),
+       new WaitCommand(1),
        new RotatePID(drivetrain, 180),
        new IntakeOFF(intake),
        new DriveToTarget(drivetrain).withTimeout(3),       
-       new GateOpen(shooter),
-       new WaitCommand(3),
-       new ShooterStop(shooter)
-
-      
-
-
-
+       new GateOpen(shooter)
+    
    ));
   }
 }

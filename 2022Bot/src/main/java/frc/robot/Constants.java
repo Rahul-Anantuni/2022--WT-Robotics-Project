@@ -15,9 +15,9 @@ package frc.robot;
 public final class Constants {
     //Speeds 
     public static final double RAMP_RATE = 0.75;
-    public static final double MAX_SPEED = 0.88;
-    public static final double SHOOTER_HIGH_SPEED = 0.5;
-    public static final double SHOOTER_LOW_SPEED = 0.40;//.4 * 5700;
+    public static final double MAX_SPEED = 0.90;
+    public static final double SHOOTER_HIGH_SPEED = 0.48;
+    public static final double SHOOTER_LOW_SPEED = 0.25;//.4 * 5700;
     public static final double INTAKE_SPEED = 0.85;
     public static final double LIFT_SPEED_UP = 1;
     public static final double LIFT_SPEED_DOWN = 1;

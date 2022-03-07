@@ -21,14 +21,12 @@ public class AutoTwo extends SequentialCommandGroup {
       super(
         sequence(
           new DropIntake(drivetrain),
-          new DriveDistance(drivetrain, 0.6, 55),
+          new ShooterHigh(shooter),
+          new DriveDistance(drivetrain, -0.6, 55),
           new DriveToTarget(drivetrain).withTimeout(3),
          // new WaitCommand(0.5), //remove if gate is present
-          new ShooterHigh(shooter),
-          new WaitCommand(4),
-          new LoadBall(drivetrain),
-          new WaitCommand(3),
-          new ShooterStop(shooter)
+          new GateOpen(shooter)
+         // new LoadBall(drivetrain)
         )
       );
               

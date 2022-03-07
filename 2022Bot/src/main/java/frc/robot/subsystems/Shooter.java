@@ -29,7 +29,7 @@ private SparkMaxPIDController m_pidController = shooterMotor.getPIDController();
 
     shooterMotor.setOpenLoopRampRate(0.08);
     shooterMotor.setClosedLoopRampRate(0.08);
-    shooterMotor.setSmartCurrentLimit(40);
+    shooterMotor.setSmartCurrentLimit(60);
     gateClose();
 
     m_pidController.setP(0.00095);
@@ -67,7 +67,7 @@ private SparkMaxPIDController m_pidController = shooterMotor.getPIDController();
   public void gateOpen (){
     gate.set(0.7);
   }
-  private void gateClose() {
+  public void gateClose() {
     gate.set(0.0);
   }
   public void gateSet(double angle){

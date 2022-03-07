@@ -27,6 +27,8 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDrive DriveTrain = new DifferentialDrive (topLeft, topRight);
   private Pigeon2 gyro = new Pigeon2(Constants.GYRO_PORT);
   private boolean isReversed = false;
+  private boolean isFlipped = false;
+
 
   private Encoder leftEncoder = new Encoder(Constants.encoder_LeftA, Constants.encoder_LeftB,
    true, CounterBase.EncodingType.k4X);
@@ -37,6 +39,7 @@ public class Drivetrain extends SubsystemBase {
   private MedianFilter m_filter = new MedianFilter(5);
 
   private LimeLight m_limeLight = new LimeLight();
+
 
   public Drivetrain() {
     topLeft.configFactoryDefault() ;
@@ -80,22 +83,39 @@ public class Drivetrain extends SubsystemBase {
     DriveTrain.arcadeDrive(speed, rotation);
   }
   public void TeleopTankDrive(double leftSpeed, double rightSpeed){
-    if (leftSpeed > Constants.MAX_SPEED){
-        leftSpeed = Constants.MAX_SPEED;
-    } else if (leftSpeed < -Constants.MAX_SPEED){
-      leftSpeed = -Constants.MAX_SPEED;
+    double ls = leftSpeed;
+    double rs = rightSpeed;
+    if (isFlipped){
+      ls = rightSpeed;
+      rs = leftSpeed;
     }
-    if (rightSpeed > Constants.MAX_SPEED){
-      rightSpeed = Constants.MAX_SPEED;
-    } else if (rightSpeed < -Constants.MAX_SPEED){
-      rightSpeed = -Constants.MAX_SPEED;
+    if (isReversed){
+      ls = -ls;
+      rs = -rs;
     }
+    
+    
+    if (ls > Constants.MAX_SPEED){
+        ls = Constants.MAX_SPEED;
+    } else if (ls < -Constants.MAX_SPEED){
+      ls = -Constants.MAX_SPEED;
+    }
+    if (rs > Constants.MAX_SPEED){
+      rs = Constants.MAX_SPEED;
+    } else if (rs < -Constants.MAX_SPEED){
+      rs = -Constants.MAX_SPEED;
+    
+    }
+    DriveTrain.tankDrive(ls, rs);
 
+/*
     if (isReversed){
       DriveTrain.tankDrive(leftSpeed, rightSpeed);
     }else {
       DriveTrain.tankDrive(-leftSpeed, -rightSpeed);
+
     }
+    */
   }
   
   //Encoder methods
@@ -110,7 +130,7 @@ public class Drivetrain extends SubsystemBase {
     return rightEncoder.getDistance();
   }
   public double getAverageDistance(){
-    return ((leftEncoder.getDistance() + rightEncoder.getDistance()) /2) + Constants.DIST_ADJUSTMENT;  
+    return ((leftEncoder.getDistance() + rightEncoder.getDistance()) /2); //+ Constants.DIST_ADJUSTMENT;  
   }
 
   //ultrasonic sensor
@@ -131,6 +151,13 @@ public class Drivetrain extends SubsystemBase {
       isReversed = true;
     }
   }
+  public void flip(){
+    if (isFlipped){
+      isFlipped = false;
+    }else{
+      isFlipped = true;
+    }
+    }
   
   
   //gyro
@@ -186,6 +213,7 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Reading", getAngle());
     SmartDashboard.putNumber("Left Encoder", getLeftDistance());
     SmartDashboard.putNumber("Right Encoder", getRightDistance());
+    SmartDashboard.putNumber("Average Encoder", getAverageDistance());
 
   }
 }

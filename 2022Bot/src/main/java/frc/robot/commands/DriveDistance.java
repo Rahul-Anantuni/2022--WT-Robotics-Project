@@ -14,13 +14,14 @@ public class DriveDistance extends CommandBase {
   private Drivetrain dt; //Stored drivetrain subsystem
   private double s;      //Stored Speed value
   private double d;      //Stored Distance to travel
-  private int counter = 0;
   /** Creates a new DriveDistance. */
   public DriveDistance(Drivetrain drivetrain, double speed, double distance) {
       //Store the parameters in the Global Variables
       dt = drivetrain;
       s = speed;
-      d = distance;
+      //To simplify comparison, only look at positive distances
+      // d = distance;
+      d = Math.abs(distance);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -32,14 +33,15 @@ public class DriveDistance extends CommandBase {
   public void initialize() {
     //Make sure the robot is not moving and the Encoder readings are at 0
     dt.resetEncoders();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //Use Tank Drive method to drive straight forward
-    if (counter <= 4) {dt.TeleopTankDrive(s, s);}
-    counter++;
+    dt.TeleopTankDrive(s, s);
+    
     //Display Distance Reading on Smartboard for Debugging Purposes
     SmartDashboard.putNumber("EncoderDistance", dt.getAverageDistance());
   }
@@ -55,7 +57,9 @@ public class DriveDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     //Command is finished when Encoder reading is >= desired distance
-    if ((dt.getAverageDistance() >= d) && (counter > 4)){
+    //Simplify by only comparing positive distances
+    if ((dt.getAverageDistance() >= d)){
+    //if ( (counter > 600)){
       return true;
     } else {
       return false;
