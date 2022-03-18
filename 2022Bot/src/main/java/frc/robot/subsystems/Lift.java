@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -17,13 +13,10 @@ public class Lift extends SubsystemBase {
   private CANSparkMax winchMotor = new CANSparkMax(Constants.WINCH_PORT, MotorType.kBrushless);
   private WPI_VictorSPX liftMotor = new WPI_VictorSPX (Constants.LIFT_PORT);
 
-
   public Lift() {
-
     liftMotor.configFactoryDefault();
     winchMotor.restoreFactoryDefaults();
   }
-
 
   public void liftUp() {
     liftMotor.set(Constants.LIFT_SPEED_UP);
@@ -47,6 +40,5 @@ public class Lift extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Winch Output Current", winchMotor.getOutputCurrent());
-
   }
 }

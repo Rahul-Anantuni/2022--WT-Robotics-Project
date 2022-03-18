@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
@@ -32,16 +28,10 @@ private SparkMaxPIDController m_pidController = shooterMotor.getPIDController();
     shooterMotor.setSmartCurrentLimit(60);
     gateClose();
 
-    m_pidController.setP(0.00095);
     m_pidController.setI(0);
-    m_pidController.setD(0.00001);
+    m_pidController.setD(0.0);
     m_pidController.setIZone(0);
-    m_pidController.setFF(0.0);//(0.000015);
     m_pidController.setOutputRange(-1,1);
-
-
-
-
   }
   public void stop(){
     
@@ -50,18 +40,19 @@ private SparkMaxPIDController m_pidController = shooterMotor.getPIDController();
     gateClose();
   }
   public void shooterMotorHigh (){
-    //setVelocity(Constants.SHOOTER_HIGH_SPEED);
+    m_pidController.setP(0.0008);
+    m_pidController.setFF(0.0002);//(0.000015);
   //  double s = SmartDashboard.getNumber("Shooter Speed", 0.5);
-   shooterMotor.set(-Constants.SHOOTER_HIGH_SPEED);
-    //shooterMotor.set(-s);
-
-
+  // shooterMotor.set(-Constants.SHOOTER_HIGH_SPEED);
+  setVelocity(Constants.SHOOTER_HIGH_SPEED);
+   //shooterMotor.set(-s);
   }
   public void shooterMotorLow (){
-    //setVelocity(Constants.SHOOTER_LOW_SPEED);
-    shooterMotor.set(-Constants.SHOOTER_LOW_SPEED);
-    
+    m_pidController.setP(0.00002);
+    m_pidController.setFF(0.000185);//(0.000015);
 
+    setVelocity(Constants.SHOOTER_LOW_SPEED);
+    //shooterMotor.set(-Constants.SHOOTER_LOW_SPEED);
   }
 
   public void gateOpen (){

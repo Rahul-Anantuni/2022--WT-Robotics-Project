@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -15,8 +11,8 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.classes.LimeLight;
 import frc.robot.Constants;
+import frc.robot.classes.LimeLight;
 
 public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
@@ -29,7 +25,6 @@ public class Drivetrain extends SubsystemBase {
   private boolean isReversed = false;
   private boolean isFlipped = false;
 
-
   private Encoder leftEncoder = new Encoder(Constants.encoder_LeftA, Constants.encoder_LeftB,
    true, CounterBase.EncodingType.k4X);
   private Encoder rightEncoder = new Encoder(Constants.encoder_RightA, Constants.encoder_RightB, 
@@ -39,7 +34,6 @@ public class Drivetrain extends SubsystemBase {
   private MedianFilter m_filter = new MedianFilter(5);
 
   private LimeLight m_limeLight = new LimeLight();
-
 
   public Drivetrain() {
     topLeft.configFactoryDefault() ;
@@ -94,7 +88,6 @@ public class Drivetrain extends SubsystemBase {
       rs = -rs;
     }
     
-    
     if (ls > Constants.MAX_SPEED){
         ls = Constants.MAX_SPEED;
     } else if (ls < -Constants.MAX_SPEED){
@@ -130,7 +123,8 @@ public class Drivetrain extends SubsystemBase {
     return rightEncoder.getDistance();
   }
   public double getAverageDistance(){
-    return ((leftEncoder.getDistance() + rightEncoder.getDistance()) /2); //+ Constants.DIST_ADJUSTMENT;  
+    //return ((leftEncoder.getDistance() + rightEncoder.getDistance()) /2); //+ Constants.DIST_ADJUSTMENT;  
+    return leftEncoder.getDistance();
   }
 
   //ultrasonic sensor
@@ -159,7 +153,6 @@ public class Drivetrain extends SubsystemBase {
     }
     }
   
-  
   //gyro
   public double getAngle(){
     int normalizer = 0;
@@ -170,18 +163,15 @@ public class Drivetrain extends SubsystemBase {
     angle360 = angle360 - (360*normalizer);
     return angle360;
   }
-
   public void gyroReset(){
     gyro.setYaw(0);
   }
-
   public void setRampRate(double rampRate){
     topRight.configOpenloopRamp(rampRate);
     bottomRight.configOpenloopRamp(rampRate);
     topLeft.configOpenloopRamp(rampRate);
     bottomLeft.configOpenloopRamp(rampRate);
   }
-
   //Limelight
   public boolean visionDriveToTarget(){
   //  m_limeLight.setVisionMode(true);
@@ -196,24 +186,19 @@ public class Drivetrain extends SubsystemBase {
       return false;
     }
   }
-
   public void setDriverMode(){
     m_limeLight.setVisionMode(false);
   }
-
   public void setVisionMode(){
     m_limeLight.setVisionMode(true);
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
     SmartDashboard.putNumber("UltrasonicDistance", getDistance());
     SmartDashboard.putNumber("Gyro Reading", getAngle());
     SmartDashboard.putNumber("Left Encoder", getLeftDistance());
     SmartDashboard.putNumber("Right Encoder", getRightDistance());
     SmartDashboard.putNumber("Average Encoder", getAverageDistance());
-
   }
 }
