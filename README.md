@@ -1,4 +1,6 @@
 # RapidReact2022
+Added PDF copy of Controls Engineering in the FIRST Robotics Competition by Tyler Veness under docs folder
+
 # Link for Robot Characterization
 https://docs.wpilib.org/en/stable/docs/software/pathplanning/system-identification/introduction.html
 
